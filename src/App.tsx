@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Layout } from 'antd'
+import React from 'react'
+import styled from 'styled-components'
+
+import Wallet from './Wallet'
+
+import 'antd/dist/antd.css'
+import ItemsIndex from './items'
+
+const { Header, Footer } = Layout
+
+const Content : typeof Layout.Content = styled(Layout.Content)`
+  background-color: #dbdbdb;
+`
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Layout className="layout">
+      <Header>
+        <Wallet />
+      </Header>
+      <Content style={{ padding: '0 50px' }}>
+        <ItemsIndex />
+      </Content>
+      <Footer style={{ textAlign: 'center' }}>elboletaire {'>'} RACA devs</Footer>
+    </Layout>
+  )
 }
 
-export default App;
+export default App
+
+
