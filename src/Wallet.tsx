@@ -9,8 +9,19 @@ const Connected = styled.p`
   color: white;
 `
 
+const Ellipsis = styled.span`
+  display: inline-block;
+  width: 300px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: pre;
+`
+
+const addressCut = (address: string, places: number = 5) =>
+  address?.substr(0, places) + '...' + address?.substr(address.length - places, address.length)
+
 const Wallet = () => {
-  const { account: loggedAccount, active, activate } = useWeb3React()
+  const { account, active, activate } = useWeb3React()
 
   useEagerConnect()
 
@@ -22,7 +33,11 @@ const Wallet = () => {
         }}>Connect wallet</Button>
       </Then>
       <Else>
-        <Connected>Connected {loggedAccount}</Connected>
+        <Connected>
+          <Ellipsis title={account || ''}>
+            Connected {addressCut(account || '')}
+          </Ellipsis>
+        </Connected>
       </Else>
     </If>
   )

@@ -51,7 +51,8 @@ const ItemsIndex = () => {
       })
 
       if (!ret.data.list.length) {
-        throw new Error('ups, no data received')
+        console.error('no data received')
+        return
       }
 
       setTotalPages(ret.data.total)
