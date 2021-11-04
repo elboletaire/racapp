@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { Else, If, Then } from 'react-if'
 import styled from 'styled-components'
 import ItemsList from './list'
+import ItemsTable from './table'
 
 const Header : typeof Row = styled(Row)`
   margin: 20px 0;
@@ -115,7 +116,7 @@ const ItemsIndex = () => {
               <ItemsList data={data} maxPrice={maxPrice} />
             </Then>
             <Else>
-              Table
+              <ItemsTable data={data} maxPrice={maxPrice} />
             </Else>
           </If>
           <Pagination
