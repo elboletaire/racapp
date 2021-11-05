@@ -1,10 +1,12 @@
 import { Web3Provider } from '@ethersproject/providers'
+import { Web3ReactProvider } from '@web3-react/core'
 import React from 'react'
 import ReactDOM from 'react-dom'
-
+import { BrowserRouter } from 'react-router-dom'
 import App from './App'
+import { ContractsProvider } from './hooks/wallet'
+
 import reportWebVitals from './reportWebVitals'
-import { Web3ReactProvider } from '@web3-react/core'
 
 function getLibrary(provider: any) {
   return new Web3Provider(provider, 'any')
@@ -12,9 +14,13 @@ function getLibrary(provider: any) {
 
 ReactDOM.render(
   <React.StrictMode>
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <App />
-    </Web3ReactProvider>
+    <BrowserRouter>
+      <Web3ReactProvider getLibrary={getLibrary}>
+        <ContractsProvider>
+          <App />
+        </ContractsProvider>
+      </Web3ReactProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 )

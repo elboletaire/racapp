@@ -1,12 +1,11 @@
-import { useWeb3React } from '@web3-react/core'
 import { Card, Col, Row } from 'antd'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import { useContracts } from '../hooks/wallet'
 import ItemCard from './card'
 
 import 'antd/dist/antd.css'
-import { purchase } from '../constants'
 // import { StarOutlined } from '@ant-design/icons'
 
 const StyledCard : typeof Card = styled(Card)`
@@ -37,14 +36,20 @@ const StyledRow : typeof Row = styled(Row)`
 // `
 
 const ItemsList = ({data, maxPrice}: {data: any[], maxPrice: number}) => {
-  const { account, library } = useWeb3React()
+  const { executeAuction } = useContracts()
   const [ loading, setLoading ] = useState<boolean[]>([])
+  const responsive = {
+    xl: {span: 3},
+    lg: {span: 6},
+    md: {span: 8},
+    xs: {span: 12},
+  }
 
   return (
     <StyledRow gutter={20}>
       {
         data.map((item: any) => (
-          <Col xl={{span: 3}} lg={{span: 6}} md={{span: 8}} xs={{span: 12}}>
+          <Col {...responsive} key={item.id}>
             <StyledCard
               hoverable
               loading={loading[item.id]}
@@ -53,7 +58,7 @@ const ItemsList = ({data, maxPrice}: {data: any[], maxPrice: number}) => {
               onClick={async () => {
                 setLoading({...loading, [item.id]: true})
 
-                await purchase(library, account, item)
+                await executeAuction?.(item)
 
                 setLoading({...loading, [item.id]: false})
               }}

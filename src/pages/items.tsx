@@ -1,12 +1,12 @@
 import { TableOutlined, UnorderedListOutlined } from '@ant-design/icons'
 import { Button, Col, Input, InputNumber, Pagination, Row } from "antd"
 import { valueType } from 'antd/lib/statistic/utils'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { useEffect, useState } from 'react'
 import { Else, If, Then } from 'react-if'
 import styled from 'styled-components'
-import ItemsList from './list'
-import ItemsTable from './table'
+import ItemsList from '../items/list'
+import ItemsTable from '../items/table'
 
 const Header : typeof Row = styled(Row)`
   margin: 20px 0;
@@ -47,17 +47,22 @@ const ItemsIndex = () => {
         params.name = search
       }
 
-      const ret = await axios.get('https://market-api.radiocaca.com/nft-sales', {
-        params,
-      })
+      let ret : AxiosResponse
+      try {
+        ret = await axios.get('https://market-api.radiocaca.com/nft-sales', {
+          params,
+        })
 
-      if (!ret.data.list.length) {
-        console.error('no data received')
-        return
+        if (!ret.data.list.length) {
+          throw new Error('no data received')
+        }
+
+        setTotalPages(ret.data.total)
+        setData(ret.data.list)
+      } catch (e) {
+        console.error('cannot fetch data:', e)
       }
 
-      setTotalPages(ret.data.total)
-      setData(ret.data.list)
       setLoading(false)
       setLoaded(true)
     }
@@ -127,6 +132,7 @@ const ItemsIndex = () => {
             showSizeChanger={false}
             hideOnSinglePage
             defaultPageSize={100}
+            style={{marginBottom: 20}}
           />
         </Then>
       </If>

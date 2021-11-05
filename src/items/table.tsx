@@ -1,16 +1,15 @@
-import { useWeb3React } from '@web3-react/core'
 import { Button, Table } from 'antd'
 import { useState } from 'react'
 
-import { purchase } from '../constants'
+import { useContracts } from '../hooks/wallet'
 
 const ItemsTable = ({data, maxPrice}: {data: any[], maxPrice: number}) => {
-  const { library, account } = useWeb3React()
+  const { executeAuction } = useContracts()
   const [ loading, setLoading ] = useState<boolean[]>([])
 
   return (
     <Table
-      dataSource={data}
+      dataSource={data.map((val) => ({...val, key: val.id}))}
       pagination={false}
       size='small'
       columns={[
@@ -50,7 +49,7 @@ const ItemsTable = ({data, maxPrice}: {data: any[], maxPrice: number}) => {
               loading={loading[item.id]}
               onClick={async () => {
                 setLoading({...loading, [item.id]: true})
-                await purchase(library, account, item)
+                await executeAuction?.(item)
                 setLoading({...loading, [item.id]: false})
               }}
             >

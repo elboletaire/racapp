@@ -5,16 +5,10 @@ import styled from 'styled-components'
 import { injected } from './connectors'
 import { useEagerConnect } from './hooks/wallet'
 
-const Connected = styled.p`
+const WalletWrapper = styled.div`
   color: white;
-`
-
-const Ellipsis = styled.span`
-  display: inline-block;
-  width: 300px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: pre;
+  float: left;
+  margin-right: 20px;
 `
 
 const addressCut = (address: string, places: number = 5) =>
@@ -26,20 +20,20 @@ const Wallet = () => {
   useEagerConnect()
 
   return (
-    <If condition={!Boolean(active)}>
-      <Then>
-        <Button onClick={() => {
-          activate(injected)
-        }}>Connect wallet</Button>
-      </Then>
-      <Else>
-        <Connected>
-          <Ellipsis title={account || ''}>
+    <WalletWrapper>
+      <If condition={!Boolean(active)}>
+        <Then>
+          <Button onClick={() => {
+            activate(injected)
+          }}>Connect wallet</Button>
+        </Then>
+        <Else>
+          <span title={account || ''}>
             Connected {addressCut(account || '')}
-          </Ellipsis>
-        </Connected>
-      </Else>
-    </If>
+          </span>
+        </Else>
+      </If>
+    </WalletWrapper>
   )
 }
 
