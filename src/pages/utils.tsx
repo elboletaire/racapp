@@ -8,7 +8,7 @@ import { If, Then } from 'react-if'
 import styled from 'styled-components'
 import { getErrorMessage, RacaAuctionsContract } from '../constants'
 import { useContracts } from '../hooks/wallet'
-import ItemCard from '../items/card'
+import ItemMeta from '../items/meta'
 
 const Content = styled.div`
   margin: 20px 0;
@@ -131,7 +131,7 @@ const Utils = () => {
                 setLoading(false)
               }}
             >
-              <ItemCard
+              <ItemMeta
                 item={nft}
               />
             </Card>

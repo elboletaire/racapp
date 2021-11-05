@@ -14,7 +14,7 @@ const UnitsColumn : typeof Col = styled(Col)`
 `
 
 
-const ItemCard = ({item} : {item: any}) => {
+const ItemMeta = ({item} : {item: any}) => {
   return (
     <Meta
       title={<span>{item.name}<StyledTag color='blue'>x{item.count}</StyledTag></span>}
@@ -47,4 +47,4 @@ const ItemCard = ({item} : {item: any}) => {
   )
 }
 
-export default ItemCard
+export default ItemMeta

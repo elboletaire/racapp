@@ -37,7 +37,7 @@ const ItemsIndex = () => {
 
       const params : any = {
         pageNo: page,
-        pageSize: 100,
+        pageSize: 96,
         sortBy: 'created_at',
         order: 'desc',
         saleType: 'fixed_price',

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { useContracts } from '../hooks/wallet'
-import ItemCard from './card'
+import ItemMeta from './meta'
 
 import 'antd/dist/antd.css'
 // import { StarOutlined } from '@ant-design/icons'
@@ -35,6 +35,25 @@ const StyledRow : typeof Row = styled(Row)`
 //   color: orange;
 // `
 
+const Wrapper = styled.div<{src: string}>`
+  height: 250px;
+  background-image: url(${props => props.src ? props.src : ''});
+  background-size: cover;
+  background-position: center;
+
+  img {
+    display: none;
+  }
+`
+
+const SameSizeImage = ({src, alt}: {src: string, alt: string}) => {
+  return (
+    <Wrapper src={src}>
+      <img alt={alt} src={src} />
+    </Wrapper>
+  )
+}
+
 const ItemsList = ({data, maxPrice}: {data: any[], maxPrice: number}) => {
   const { executeAuction } = useContracts()
   const [ loading, setLoading ] = useState<boolean[]>([])
@@ -53,7 +72,7 @@ const ItemsList = ({data, maxPrice}: {data: any[], maxPrice: number}) => {
             <StyledCard
               hoverable
               loading={loading[item.id]}
-              cover={<img alt='icon' src={item.image_url} />}
+              cover={<SameSizeImage alt='icon' src={item.image_url} />}
               className={maxPrice >= Number(item.fixed_price)/Number(item.count) ? 'purchasable' : ''}
               onClick={async () => {
                 setLoading({...loading, [item.id]: true})
@@ -63,7 +82,7 @@ const ItemsList = ({data, maxPrice}: {data: any[], maxPrice: number}) => {
                 setLoading({...loading, [item.id]: false})
               }}
             >
-              <ItemCard
+              <ItemMeta
                 item={item}
               />
             </StyledCard>
