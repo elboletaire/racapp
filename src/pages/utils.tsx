@@ -29,7 +29,7 @@ const Utils = () => {
   const [ loadingAllowance, setLoadingAllowance ] = useState<boolean>(false)
   const [ importId, setImportId ] = useState<string>()
   const [ nft, setNft ] = useState<any>({})
-  const [ loading, setLoading ] = useState<boolean>(false)
+  const [ setLoading ] = useState<boolean>(false)
 
   const load = useCallback(() => {
     ;(async () => {
