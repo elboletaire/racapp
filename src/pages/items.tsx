@@ -21,6 +21,8 @@ const AnInput : typeof InputNumber = styled(InputNumber)`
   width: 100%;
 `
 
+const defaultPageSize = 96
+
 const ItemsIndex = () => {
   const [indexType, setIndexType] = useState<string>('list')
   const [loading, setLoading] = useState<boolean>(false)
@@ -37,7 +39,7 @@ const ItemsIndex = () => {
 
       const params : any = {
         pageNo: page,
-        pageSize: 96,
+        pageSize: defaultPageSize,
         sortBy: 'created_at',
         order: 'desc',
         saleType: 'fixed_price',
@@ -131,7 +133,7 @@ const ItemsIndex = () => {
             total={totalPages}
             showSizeChanger={false}
             hideOnSinglePage
-            defaultPageSize={100}
+            defaultPageSize={defaultPageSize}
             style={{marginBottom: 20}}
           />
         </Then>

@@ -12,6 +12,7 @@ const StyledCard : typeof Card = styled(Card)`
   margin-bottom: 20px;
   &.purchasable {
     background-color: green;
+    border-color: darkgreen;
 
     .ant-card-meta-title {
       color: white;
@@ -37,7 +38,7 @@ const StyledRow : typeof Row = styled(Row)`
 
 const Wrapper = styled.div<{src: string}>`
   height: 250px;
-  background-image: url(${props => props.src ? props.src : ''});
+  background-image: url(${props => props.src});
   background-size: cover;
   background-position: center;
 

@@ -62,7 +62,7 @@ const App = () => {
           }
         </Menu>
       </Header>
-      <Content style={{ padding: '0 50px' }}>
+      <Content style={{ padding: '0 50px', backgroundColor: '#232323' }}>
         <Routes>
           {
             routes.map((route, k) => <Route key={k} {...cleanRoute(route) as PathRouteProps} />)
