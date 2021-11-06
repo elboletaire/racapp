@@ -2,9 +2,10 @@ import { TableOutlined, UnorderedListOutlined } from '@ant-design/icons'
 import { Button, Col, Input, InputNumber, Pagination, Row } from "antd"
 import { valueType } from 'antd/lib/statistic/utils'
 import axios, { AxiosResponse } from 'axios'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Else, If, Then } from 'react-if'
 import styled from 'styled-components'
+import { useFilters } from '../hooks/filters'
 import ItemsList from '../items/list'
 import ItemsTable from '../items/table'
 
@@ -28,10 +29,9 @@ const ItemsIndex = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [loaded, setLoaded] = useState<boolean>(false)
   const [data, setData] = useState<any[]>([])
-  const [search, setSearch] = useState<string>()
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
-  const [maxPrice, setMaxPrice] = useState<number>(0)
+  const {search, setSearch, highlightBelowPrice, setHighlightBelowPrice} = useFilters()
 
   useEffect(() => {
     const loadData = async () => {
@@ -82,35 +82,38 @@ const ItemsIndex = () => {
   return (
     <>
       <Header>
-        <Col span={14}>
+        <Col xs={24} md={11}>
           <Input
-            onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              // @ts-ignore
+            placeholder='Filter by name'
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setSearch(e.target.value)
             }}
+            value={search}
           />
         </Col>
-        <Col span={7} style={{alignContent: 'flex-end'}}>
+        <Col xs={20} md={10} style={{alignContent: 'flex-end'}}>
           <AnInput
+            placeholder='Highlight items below price'
             onChange={(value: valueType) => {
               if (!value || value <= 0) {
                 value = 0
               }
 
-              setMaxPrice(Number(value.toString()))
+              setHighlightBelowPrice(Number(value.toString()))
             }}
             min={0}
             step={0.01}
+            value={highlightBelowPrice}
           />
         </Col>
-        <Col span={3}>
+        <Col xs={4} md={3}>
           <IndexTypeSelector>
             <Button.Group>
-              <Button onClick={() => setIndexType('table')}>
-                <TableOutlined />
-              </Button>
               <Button onClick={() => setIndexType('list')}>
                 <UnorderedListOutlined />
+              </Button>
+              <Button onClick={() => setIndexType('table')}>
+                <TableOutlined />
               </Button>
             </Button.Group>
           </IndexTypeSelector>
@@ -120,10 +123,10 @@ const ItemsIndex = () => {
         <Then>
           <If condition={indexType === 'list'}>
             <Then>
-              <ItemsList data={data} maxPrice={maxPrice} />
+              <ItemsList data={data} />
             </Then>
             <Else>
-              <ItemsTable data={data} maxPrice={maxPrice} />
+              <ItemsTable data={data} />
             </Else>
           </If>
           <Pagination

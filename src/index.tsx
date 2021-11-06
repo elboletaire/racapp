@@ -3,8 +3,10 @@ import { Web3ReactProvider } from '@web3-react/core'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
-import App from './App'
+
+import { FiltersProvider } from './hooks/filters'
 import { ContractsProvider } from './hooks/wallet'
+import App from './App'
 
 import reportWebVitals from './reportWebVitals'
 
@@ -17,7 +19,9 @@ ReactDOM.render(
     <BrowserRouter>
       <Web3ReactProvider getLibrary={getLibrary}>
         <ContractsProvider>
-          <App />
+          <FiltersProvider>
+            <App />
+          </FiltersProvider>
         </ContractsProvider>
       </Web3ReactProvider>
     </BrowserRouter>

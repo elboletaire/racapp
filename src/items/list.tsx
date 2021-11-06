@@ -6,6 +6,7 @@ import { useContracts } from '../hooks/wallet'
 import ItemMeta from './meta'
 
 import 'antd/dist/antd.css'
+import { useFilters } from '../hooks/filters'
 // import { StarOutlined } from '@ant-design/icons'
 
 const StyledCard : typeof Card = styled(Card)`
@@ -37,11 +38,16 @@ const StyledRow : typeof Row = styled(Row)`
 // `
 
 const Wrapper = styled.div<{src: string}>`
-  height: 250px;
+  height: 75px;
   background-image: url(${props => props.src});
   background-size: cover;
   background-position: center;
-
+  @media (min-width: 768px) {
+    height: 130px;
+  }
+  @media (min-width: 992px) {
+    height: 150px;
+  }
   img {
     display: none;
   }
@@ -55,9 +61,10 @@ const SameSizeImage = ({src, alt}: {src: string, alt: string}) => {
   )
 }
 
-const ItemsList = ({data, maxPrice}: {data: any[], maxPrice: number}) => {
+const ItemsList = ({data}: {data: any[]}) => {
   const { executeAuction } = useContracts()
   const [ loading, setLoading ] = useState<boolean[]>([])
+  const { highlightBelowPrice } = useFilters()
   const responsive = {
     xl: {span: 3},
     lg: {span: 6},
@@ -74,7 +81,7 @@ const ItemsList = ({data, maxPrice}: {data: any[], maxPrice: number}) => {
               hoverable
               loading={loading[item.id]}
               cover={<SameSizeImage alt='icon' src={item.image_url} />}
-              className={maxPrice >= Number(item.fixed_price)/Number(item.count) ? 'purchasable' : ''}
+              className={highlightBelowPrice >= Number(item.fixed_price)/Number(item.count) ? 'purchasable' : ''}
               onClick={async () => {
                 setLoading({...loading, [item.id]: true})
 

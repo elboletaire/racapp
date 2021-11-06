@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { useContracts } from '../hooks/wallet'
 
-const ItemsTable = ({data, maxPrice}: {data: any[], maxPrice: number}) => {
+const ItemsTable = ({data}: {data: any[]}) => {
   const { executeAuction } = useContracts()
   const [ loading, setLoading ] = useState<boolean[]>([])
 
