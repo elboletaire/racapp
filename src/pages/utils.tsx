@@ -60,7 +60,8 @@ const Utils = () => {
     setLoadingAllowance(true)
 
     try {
-      await bep20?.approve(RacaAuctionsContract, amount)
+      const tx = await bep20?.approve(RacaAuctionsContract, amount)
+      await tx.wait()
     } catch (e) {
       const msg = getErrorMessage(e)
       if (msg) {
@@ -71,8 +72,6 @@ const Utils = () => {
 
     setLoadingAllowance(false)
   }
-
-  console.log('nft:', nft)
 
   return (
     <Content>

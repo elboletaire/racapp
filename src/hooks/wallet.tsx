@@ -64,7 +64,8 @@ export const ContractsProvider = ({children} : {children: ReactNode}) => {
       }
 
       if (weiprice.gt(allowance)) {
-        await bep20?.approve(RacaAuctionsContract, weiprice)
+        const ap = await bep20?.approve(RacaAuctionsContract, weiprice)
+        await ap.wait()
       }
 
       const tx = await auctions?.executeAuction(auction, weiprice, {
