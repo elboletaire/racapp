@@ -1,103 +1,28 @@
-import { Card, Col, Row } from 'antd'
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import { Col } from 'antd'
+import React from 'react'
 
+import { StretchRow } from '../components/StyledRow'
+import { ItemsListColSizes } from '../constants'
 import { useContracts } from '../hooks/wallet'
-import ItemMeta from './meta'
+import ItemCard from './card'
 
-import 'antd/dist/antd.css'
-import { useFilters } from '../hooks/filters'
-// import { StarOutlined } from '@ant-design/icons'
-
-const StyledCard : typeof Card = styled(Card)`
-  margin-bottom: 20px;
-  &.purchasable {
-    background-color: green;
-    border-color: darkgreen;
-
-    .ant-card-meta-title {
-      color: white;
-    }
-    .ant-card-meta-description {
-      color: lightgreen;
-    }
-  }
-`
-
-const StyledRow : typeof Row = styled(Row)`
-  margin-top: 20px;
-  align-items: stretch;
-`
-
-// const Star : typeof StarOutlined = styled(StarOutlined)`
-//   font-size: 20px;
-//   position: absolute;
-//   top: 10px;
-//   right: 10px;
-//   color: orange;
-// `
-
-const Wrapper = styled.div<{src: string}>`
-  height: 75px;
-  background-image: url(${props => props.src});
-  background-size: cover;
-  background-position: center;
-  @media (min-width: 768px) {
-    height: 130px;
-  }
-  @media (min-width: 992px) {
-    height: 150px;
-  }
-  img {
-    display: none;
-  }
-`
-
-const SameSizeImage = ({src, alt}: {src: string, alt: string}) => {
-  return (
-    <Wrapper src={src}>
-      <img alt={alt} src={src} />
-    </Wrapper>
-  )
-}
 
 const ItemsList = ({data}: {data: any[]}) => {
   const { executeAuction } = useContracts()
-  const [ loading, setLoading ] = useState<boolean[]>([])
-  const { highlightBelowPrice } = useFilters()
-  const responsive = {
-    xl: {span: 3},
-    lg: {span: 6},
-    md: {span: 8},
-    xs: {span: 12},
-  }
 
   return (
-    <StyledRow gutter={20}>
+    <StretchRow gutter={20}>
       {
         data.map((item: any) => (
-          <Col {...responsive} key={item.id}>
-            <StyledCard
-              hoverable
-              loading={loading[item.id]}
-              cover={<SameSizeImage alt='icon' src={item.image_url} />}
-              className={highlightBelowPrice >= Number(item.fixed_price)/Number(item.count) ? 'purchasable' : ''}
-              onClick={async () => {
-                setLoading({...loading, [item.id]: true})
-
-                await executeAuction?.(item)
-
-                setLoading({...loading, [item.id]: false})
-              }}
-            >
-              <ItemMeta
-                item={item}
-              />
-            </StyledCard>
+          <Col {...ItemsListColSizes} key={item.id}>
+            <ItemCard
+              item={item}
+              onClick={executeAuction.bind(item)}
+            />
           </Col>
         ))
       }
-    </StyledRow>
+    </StretchRow>
   )
 }
 

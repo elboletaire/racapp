@@ -1,23 +1,16 @@
-import { Col, Row, Tag } from 'antd'
+import { Col, Row } from 'antd'
 import Meta from 'antd/lib/card/Meta'
 import styled from 'styled-components'
-
-const StyledTag : typeof Tag = styled(Tag)`
-  font-size: .7em;
-  line-height: 1.5em;
-  padding: 0 5px;
-  margin-left: 10px;
-`
+import { SmallTag } from '../components/CountTag'
 
 const UnitsColumn : typeof Col = styled(Col)`
   text-align: right;
 `
 
-
 const ItemMeta = ({item} : {item: any}) => {
   return (
     <Meta
-      title={<span>{item.name}<StyledTag color='blue'>x{item.count}</StyledTag></span>}
+      title={<span>{item.name}<SmallTag color='blue'>x{item.count}</SmallTag></span>}
       description={(
         <Row>
           <Col span={24}>
@@ -37,9 +30,6 @@ const ItemMeta = ({item} : {item: any}) => {
                 {Number(item.fixed_price).toLocaleString('en-US')}
               </UnitsColumn>
             </Row>
-          </Col>
-          <Col span={24}>
-
           </Col>
         </Row>
       )}

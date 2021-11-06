@@ -5,7 +5,14 @@ import { ethers } from 'ethers'
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react'
 
 import { injected } from '../connectors'
-import { RacaAuctionsABI, RacaAuctionsContract, RacaBEP20ABI, RacaBEP20Contract } from '../constants'
+import {
+  RacaAuctionsABI,
+  RacaAuctionsContract,
+  RacaBep20Abi,
+  RacaBep20Contract,
+  RacaNftAbi,
+} from '../constants'
+import nftlist from '../nft-list.json'
 
 export const useEagerConnect = () => {
   const { activate, active } = useWeb3React()
@@ -35,17 +42,26 @@ export const useEagerConnect = () => {
   return tried
 }
 
+interface NftContract {
+  name: string,
+  contract: ethers.Contract,
+}
+
 interface Contracts {
   bep20?: ethers.Contract,
   auctions?: ethers.Contract,
-  executeAuction?: (item: any) => void,
+  nfts?: NftContract[],
+  executeAuction: (item: any) => void,
 }
 
-const ContractsContext = createContext<Contracts>({})
+const ContractsContext = createContext<Contracts>({
+  executeAuction: () => {},
+})
 
 export const ContractsProvider = ({children} : {children: ReactNode}) => {
   const [ bep20, setBep20 ] = useState<ethers.Contract>()
   const [ auctions, setAuctions ] = useState<ethers.Contract>()
+  const [ nfts, setNfts ] = useState<NftContract[]>([])
   const [ init, setInit ] = useState<boolean>(false)
   const { library, account } = useWeb3React()
 
@@ -92,24 +108,41 @@ export const ContractsProvider = ({children} : {children: ReactNode}) => {
   }
 
   useEffect(() => {
-    if (bep20 || auctions || init || !library) {
-      return
-    }
+    ;(async () => {
+      if (init || !library) {
+        return
+      }
 
-    const signer = library.getSigner()
+      const signer = library.getSigner()
 
-    const bep = new ethers.Contract(RacaBEP20Contract, RacaBEP20ABI, signer)
-    const rac = new ethers.Contract(RacaAuctionsContract, RacaAuctionsABI, signer)
-    setBep20(bep)
-    setAuctions(rac)
+      const nfts : NftContract[] = []
 
-    setInit(true)
-  }, [
-    bep20, init, auctions, library
-  ])
+      nftlist.forEach((item) => {
+        try {
+          if (item.type && item.type === 'erc1155') {
+            nfts.push({
+              name: item.name,
+              contract: new ethers.Contract(item.contract_address, RacaNftAbi, signer),
+            })
+          }
+        } catch (e) {
+          console.error('error initializing contract for %s', item.name)
+        }
+      })
+
+      const bep = new ethers.Contract(RacaBep20Contract, RacaBep20Abi, signer)
+      const rac = new ethers.Contract(RacaAuctionsContract, RacaAuctionsABI, signer)
+
+      setBep20(bep)
+      setAuctions(rac)
+      setNfts(nfts)
+
+      setInit(true)
+    })()
+  }, [bep20, init, auctions, library])
 
   return (
-    <ContractsContext.Provider value={{bep20, auctions, executeAuction}}>
+    <ContractsContext.Provider value={{bep20, auctions, executeAuction, nfts}}>
       {children}
     </ContractsContext.Provider>
   )

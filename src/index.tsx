@@ -10,6 +10,8 @@ import App from './App'
 
 import reportWebVitals from './reportWebVitals'
 
+import 'antd/dist/antd.css'
+
 function getLibrary(provider: any) {
   return new Web3Provider(provider, 'any')
 }

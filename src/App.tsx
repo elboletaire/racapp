@@ -5,6 +5,7 @@ import { PathRouteProps, Route, Routes, useLocation } from 'react-router'
 import { Link } from 'react-router-dom'
 
 import ItemsIndex from './pages/items'
+import MyStuff from './pages/stuff'
 import Utils from './pages/utils'
 import Wallet from './Wallet'
 
@@ -22,6 +23,11 @@ const App = () => {
       path: '/',
       element: <ItemsIndex />,
       title: 'Marketplace',
+    },
+    {
+      path: '/stuff',
+      element: <MyStuff />,
+      title: 'My Stuff',
     },
     {
       path: '/utils',
@@ -62,7 +68,7 @@ const App = () => {
           }
         </Menu>
       </Header>
-      <Content style={{ padding: '0 50px', backgroundColor: '#232323' }}>
+      <Content style={{ padding: '0 50px', backgroundColor: '#484848' }}>
         <Routes>
           {
             routes.map((route, k) => <Route key={k} {...cleanRoute(route) as PathRouteProps} />)
