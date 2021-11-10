@@ -1,5 +1,5 @@
-import { TableOutlined, UnorderedListOutlined } from '@ant-design/icons'
-import { Button, Col, Input, InputNumber, Pagination, Row } from "antd"
+import { CaretDownOutlined, CaretUpOutlined, TableOutlined, UnorderedListOutlined } from '@ant-design/icons'
+import { Button, Col, Input, InputNumber, Pagination, Radio, Row } from "antd"
 import { valueType } from 'antd/lib/statistic/utils'
 import axios, { AxiosResponse } from 'axios'
 import React, { useEffect, useState } from 'react'
@@ -13,7 +13,7 @@ const Header : typeof Row = styled(Row)`
   margin: 20px 0;
 `
 
-const IndexTypeSelector = styled.div`
+const FlexEndWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
 `
@@ -25,24 +25,25 @@ const AnInput : typeof InputNumber = styled(InputNumber)`
 const defaultPageSize = 96
 
 const ItemsIndex = () => {
-  const [indexType, setIndexType] = useState<string>('list')
-  const [loading, setLoading] = useState<boolean>(false)
-  const [loaded, setLoaded] = useState<boolean>(false)
-  const [data, setData] = useState<any[]>([])
-  const [page, setPage] = useState<number>(1)
-  const [totalPages, setTotalPages] = useState<number>(1)
-  const {search, setSearch, highlightBelowPrice, setHighlightBelowPrice} = useFilters()
+  const [ indexType, setIndexType ] = useState<string>('list')
+  const [ loading, setLoading ] = useState<boolean>(false)
+  const [ loaded, setLoaded ] = useState<boolean>(false)
+  const [ data, setData ] = useState<any[]>([])
+  const [ page, setPage ] = useState<number>(1)
+  const [ totalPages, setTotalPages ] = useState<number>(1)
+  const [ sortBy, setSortBy ] = useState<string>('created_at')
+  const [ order, setOrder ] = useState<string>('desc')
+  const { search, setSearch, highlightBelowPrice, setHighlightBelowPrice } = useFilters()
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
 
       const params : any = {
+        order,
+        sortBy,
         pageNo: page,
         pageSize: defaultPageSize,
-        sortBy: 'created_at',
-        order: 'desc',
-        saleType: 'fixed_price',
       }
 
       if (search) {
@@ -77,12 +78,12 @@ const ItemsIndex = () => {
     return () => {
       clearInterval(interval)
     }
-  }, [loading, loaded, search, page])
+  }, [loading, loaded, search, page, order, sortBy])
 
   return (
     <>
       <Header>
-        <Col xs={24} md={11}>
+        <Col xs={24} md={8}>
           <Input
             placeholder='Filter by name'
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,7 +92,7 @@ const ItemsIndex = () => {
             value={search}
           />
         </Col>
-        <Col xs={20} md={10} style={{alignContent: 'flex-end'}}>
+        <Col xs={24} md={8} style={{alignContent: 'flex-end'}}>
           <AnInput
             placeholder='Highlight items below price'
             onChange={(value: valueType) => {
@@ -106,8 +107,8 @@ const ItemsIndex = () => {
             value={highlightBelowPrice}
           />
         </Col>
-        <Col xs={4} md={3}>
-          <IndexTypeSelector>
+        <Col xs={9} md={3}>
+          <FlexEndWrapper>
             <Button.Group>
               <Button onClick={() => setIndexType('list')}>
                 <UnorderedListOutlined />
@@ -116,7 +117,48 @@ const ItemsIndex = () => {
                 <TableOutlined />
               </Button>
             </Button.Group>
-          </IndexTypeSelector>
+          </FlexEndWrapper>
+        </Col>
+        <Col xs={15} md={5}>
+          <FlexEndWrapper>
+            <Radio.Group
+              defaultValue={sortBy}
+              onChange={(e) => {
+                setSortBy(e.target.value)
+              }}
+            >
+              <Radio.Button value='created_at' onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}>
+                Created
+                <If condition={sortBy === 'created_at'}>
+                  <Then>
+                    <If condition={order === 'asc'}>
+                      <Then>
+                        <CaretUpOutlined />
+                      </Then>
+                      <Else>
+                        <CaretDownOutlined />
+                      </Else>
+                    </If>
+                  </Then>
+                </If>
+              </Radio.Button>
+              <Radio.Button value='fixed_price' onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}>
+                Price
+                <If condition={sortBy === 'fixed_price'}>
+                  <Then>
+                    <If condition={order === 'asc'}>
+                      <Then>
+                        <CaretUpOutlined />
+                      </Then>
+                      <Else>
+                        <CaretDownOutlined />
+                      </Else>
+                    </If>
+                  </Then>
+                </If>
+              </Radio.Button>
+            </Radio.Group>
+          </FlexEndWrapper>
         </Col>
       </Header>
       <If condition={loaded}>
