@@ -218,7 +218,7 @@ const MyStuff = () => {
 
           try {
             const decimals = await bep20.decimals()
-            const weiprice = ethers.BigNumber.from(10).pow(decimals).mul(price)
+            const weiprice = ethers.BigNumber.from(10).pow(decimals).mul(price).mul(amount)
 
             const tx = await auctions.sell(selected.nft_address, 0, amount, bep20?.address, weiprice, 0, 0)
             await tx.wait()
