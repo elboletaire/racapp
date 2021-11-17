@@ -92,12 +92,16 @@ const MyStuff = () => {
         status: 'on_sale',
       }
 
-      const { data } = await axios.get('https://market-api.radiocaca.com/artworks', {
-        params,
-      })
+      try {
+        const { data } = await axios.get('https://market-api.radiocaca.com/artworks', {
+          params,
+        })
+        setMarketListed(data.list)
+        setMarketTotalResults(data.total)
+      } catch (e) {
+        console.error('error grabbing market artworks data:', e)
+      }
 
-      setMarketListed(data.list)
-      setMarketTotalResults(data.total)
       setMarketLoading(false)
       setMarketLoaded(true)
     })()

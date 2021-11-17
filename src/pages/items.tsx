@@ -142,9 +142,9 @@ const ItemsIndex = () => {
                   </Then>
                 </If>
               </Radio.Button>
-              <Radio.Button value='fixed_price' onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}>
+              <Radio.Button value='single_price' onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}>
                 Price
-                <If condition={sortBy === 'fixed_price'}>
+                <If condition={sortBy === 'single_price'}>
                   <Then>
                     <If condition={order === 'asc'}>
                       <Then>
