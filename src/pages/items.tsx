@@ -73,7 +73,7 @@ const ItemsIndex = () => {
     if (!loaded) {
       loadData()
     }
-    const interval = setInterval(loadData, 1000)
+    const interval = setInterval(loadData, 7000)
 
     return () => {
       clearInterval(interval)
