@@ -6,8 +6,7 @@ export const RacaAuctionsABI = AuctionsABI
 export const RacaBep20Abi = Bep20Abi
 export const RacaNftAbi = NftAbi
 
-export const RacaAuctionsContract = '0x7b4452dd6c38597fa9364ac8905c27ea44425832'
-export const RacaPotionsContract = '0x51353799f8550c9010a8b0cbfe6c02ca96e026e2'
+export const RacaAuctionsContract = '0xe97fdca0a3fc76b3046ae496c1502c9d8dfef6fc'
 export const RacaBep20Contract = '0x12BB890508c125661E03b09EC06E404bc9289040'
 
 export const getErrorMessage = (e: any) => {
