@@ -29,11 +29,19 @@ const ItemsIndex = () => {
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ loaded, setLoaded ] = useState<boolean>(false)
   const [ data, setData ] = useState<any[]>([])
-  const [ page, setPage ] = useState<number>(1)
   const [ totalPages, setTotalPages ] = useState<number>(1)
-  const [ sortBy, setSortBy ] = useState<string>('created_at')
-  const [ order, setOrder ] = useState<string>('desc')
-  const { search, setSearch, highlightBelowPrice, setHighlightBelowPrice } = useFilters()
+  const {
+    search,
+    setSearch,
+    highlightBelowPrice,
+    setHighlightBelowPrice,
+    page,
+    setPage,
+    order,
+    setOrder,
+    sortBy,
+    setSortBy,
+  } = useFilters()
 
   useEffect(() => {
     const loadData = async () => {
